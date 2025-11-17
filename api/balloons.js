@@ -1,9 +1,9 @@
 // Vercel Serverless Function to proxy WindBorne balloon data
 // This bypasses CORS by fetching from server-side
 
-const https = require('https');
+import https from 'https';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   // Enable CORS for our frontend
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
