@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WindBorne Global Constellation View</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.16.0/mapbox-gl.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <div id="map"></div>
+      
+      <!-- Floating Legend -->
+      <div id="legend-float">
+        <h4>Legend</h4>
+        <div class="legend-item clickable" id="heatmap-color-toggle" title="Click to change colors">
+          <div class="legend-gradient heatmap" id="heatmap-gradient"></div>
+          <span>24h Activity Density <small>(click to change)</small></span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-gradient altitude"></div>
+          <span>Altitude (Low → High)</span>
+        </div>
+      </div>
+      
+      <!-- Color Scheme Picker -->
+      <div id="color-picker-modal" class="hidden">
+        <h4>Choose Heatmap Color Scheme</h4>
+        <div class="color-schemes">
+          <div class="color-scheme-option" data-scheme="purple">
+            <div class="scheme-preview" style="background: linear-gradient(to right, #e9d5ff, #c084fc, #a855f7, #9333ea, #6b21a8);"></div>
+            <span>Purple</span>
+          </div>
+          <div class="color-scheme-option" data-scheme="blue-red">
+            <div class="scheme-preview" style="background: linear-gradient(to right, #3b82f6, #06b6d4, #fbbf24, #f97316, #ef4444);"></div>
+            <span>Blue → Red</span>
+          </div>
+          <div class="color-scheme-option" data-scheme="green-red">
+            <div class="scheme-preview" style="background: linear-gradient(to right, #10b981, #84cc16, #facc15, #fb923c, #dc2626);"></div>
+            <span>Green → Red</span>
+          </div>
+          <div class="color-scheme-option" data-scheme="cyan-orange">
+            <div class="scheme-preview" style="background: linear-gradient(to right, #06b6d4, #0ea5e9, #f59e0b, #f97316, #ea580c);"></div>
+            <span>Cyan → Orange</span>
+          </div>
+          <div class="color-scheme-option" data-scheme="pink-purple">
+            <div class="scheme-preview" style="background: linear-gradient(to right, #fda4af, #fb7185, #ec4899, #d946ef, #a855f7);"></div>
+            <span>Pink → Purple</span>
+          </div>
+          <div class="color-scheme-option" data-scheme="yellow-red">
+            <div class="scheme-preview" style="background: linear-gradient(to right, #fef08a, #fde047, #fb923c, #f87171, #b91c1c);"></div>
+            <span>Yellow → Red</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Controls Panel -->
+      <div id="controls-panel">
+        <div id="controls-content">
+          <h3>Map Controls</h3>
+          
+          <!-- Layer Toggles -->
+          <div class="control-section">
+            <h4>Layers</h4>
+            <label class="toggle-label">
+              <input type="checkbox" id="toggle-heatmap" checked>
+              <span>24h Activity Heatmap</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" id="toggle-markers" checked>
+              <span>Current Positions</span>
+            </label>
+          </div>
+          
+          <!-- Altitude Filter -->
+          <div class="control-section">
+            <h4>Altitude Range</h4>
+            <div class="slider-group">
+              <label>Min: <span id="altitude-min-value">0 km</span></label>
+              <input type="range" id="altitude-min" min="0" max="25" step="0.5" value="0">
+            </div>
+            <div class="slider-group">
+              <label>Max: <span id="altitude-max-value">25 km</span></label>
+              <input type="range" id="altitude-max" min="0" max="25" step="0.5" value="25">
+            </div>
+          </div>
+          
+          <!-- Time Range Filter -->
+          <div class="control-section">
+            <h4>Time Range</h4>
+            <div class="slider-group">
+              <label>Show last: <span id="time-range-value">24h</span></label>
+              <input type="range" id="time-range" min="1" max="24" step="1" value="24">
+            </div>
+          </div>
+          
+          <!-- Region Filters -->
+          <div class="control-section">
+            <h4>Regions</h4>
+            <div class="region-grid">
+              <label><input type="checkbox" id="region-northAmerica" checked> N. America</label>
+              <label><input type="checkbox" id="region-southAmerica" checked> S. America</label>
+              <label><input type="checkbox" id="region-europe" checked> Europe</label>
+              <label><input type="checkbox" id="region-africa" checked> Africa</label>
+              <label><input type="checkbox" id="region-asia" checked> Asia</label>
+              <label><input type="checkbox" id="region-oceania" checked> Oceania</label>
+              <label><input type="checkbox" id="region-atlantic" checked> Atlantic</label>
+              <label><input type="checkbox" id="region-pacific" checked> Pacific</label>
+              <label><input type="checkbox" id="region-indian" checked> Indian</label>
+              <label><input type="checkbox" id="region-arctic" checked> Arctic</label>
+              <label><input type="checkbox" id="region-antarctic" checked> Antarctic</label>
+            </div>
+          </div>
+          
+          <button id="reset-filters" class="reset-btn">Reset Filters</button>
+        </div>
+      </div>
+      
+      <!-- Floating toggle button -->
+      <button id="controls-toggle" aria-label="Toggle controls">
+        <span class="toggle-icon">◀</span>
+      </button>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
