@@ -1,6 +1,8 @@
 // Vercel Serverless Function to proxy WindBorne balloon data
 // This bypasses CORS by fetching from server-side
 
+const https = require('https');
+
 module.exports = async (req, res) => {
   // Enable CORS for our frontend
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,15 +31,34 @@ module.exports = async (req, res) => {
   const windborneUrl = `https://a.windbornesystems.com/treasure/${fileNumber}.json`;
 
   try {
-    // Fetch from WindBorne API (server-side, no CORS)
-    // Note: fetch is available in Node 18+, Vercel uses Node 18 by default
-    const response = await fetch(windborneUrl);
-    
-    if (!response.ok) {
-      throw new Error(`WindBorne API returned ${response.status}`);
-    }
-
-    const data = await response.json();
+    // Fetch from WindBorne API using native https module
+    const data = await new Promise((resolve, reject) => {
+      https.get(windborneUrl, (response) => {
+        let data = '';
+        
+        // Check status code
+        if (response.statusCode !== 200) {
+          reject(new Error(`WindBorne API returned ${response.statusCode}`));
+          return;
+        }
+        
+        // Collect data chunks
+        response.on('data', (chunk) => {
+          data += chunk;
+        });
+        
+        // Parse JSON when complete
+        response.on('end', () => {
+          try {
+            resolve(JSON.parse(data));
+          } catch (err) {
+            reject(new Error('Invalid JSON from WindBorne API'));
+          }
+        });
+      }).on('error', (err) => {
+        reject(err);
+      });
+    });
     
     // Return the data with CORS headers
     return res.status(200).json(data);
